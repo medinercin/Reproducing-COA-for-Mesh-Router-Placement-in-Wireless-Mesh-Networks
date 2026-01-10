@@ -22,3 +22,6 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+
+# Table11 files
+results/tables/table11_*
