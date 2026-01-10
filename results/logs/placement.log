@@ -1,0 +1,12 @@
+2026-01-07 20:31:21,017 - INFO - Running single placement optimization...
+2026-01-07 20:31:21,018 - INFO - Configuration: W=2000, H=2000, m=20, n=50, CR=200
+2026-01-07 20:31:52,583 - INFO - Best fitness: 0.700000
+2026-01-07 20:31:52,583 - INFO - Coverage: 35/50 (70.00%)
+2026-01-07 20:31:52,583 - INFO - Connectivity: 49/70 (70.00%)
+2026-01-07 20:31:53,673 - INFO - Placement plot saved to results/figures/fig_placement_coa.png
+2026-01-07 20:42:36,904 - INFO - Running single placement optimization...
+2026-01-07 20:42:36,905 - INFO - Configuration: W=2000, H=2000, m=20, n=50, CR=200
+2026-01-07 20:43:07,359 - INFO - Best fitness: 0.700000
+2026-01-07 20:43:07,361 - INFO - Coverage: 35/50 (70.00%)
+2026-01-07 20:43:07,361 - INFO - Connectivity: 49/70 (70.00%)
+2026-01-07 20:43:08,024 - INFO - Placement plot saved to results/figures/fig_placement_coa.png

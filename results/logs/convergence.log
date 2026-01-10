@@ -1,0 +1,49 @@
+2026-01-10 00:56:41,908 - INFO - Starting convergence analysis...
+2026-01-10 00:56:41,908 - INFO - 
+============================================================
+2026-01-10 00:56:41,908 - INFO - Processing Instance1
+2026-01-10 00:56:41,908 - INFO - W=2000, H=2000, m=10, n=50, CR=200
+2026-01-10 00:56:41,908 - INFO - ============================================================
+2026-01-10 00:56:55,244 - INFO - Best fitness: 0.541667
+2026-01-10 00:56:55,244 - INFO - Coverage: 25/50 (50.00%)
+2026-01-10 00:56:55,244 - INFO - Connectivity: 35/60 (58.33%)
+2026-01-10 00:56:55,593 - INFO - Saved convergence data to results/tables/convergence_instance1.csv
+2026-01-10 00:56:55,594 - INFO - 
+============================================================
+2026-01-10 00:56:55,595 - INFO - Processing Instance2
+2026-01-10 00:56:55,595 - INFO - W=2000, H=2000, m=15, n=100, CR=200
+2026-01-10 00:56:55,595 - INFO - ============================================================
+2026-01-10 00:57:23,330 - INFO - Best fitness: 0.700870
+2026-01-10 00:57:23,330 - INFO - Coverage: 68/100 (68.00%)
+2026-01-10 00:57:23,330 - INFO - Connectivity: 83/115 (72.17%)
+2026-01-10 00:57:23,648 - INFO - Saved convergence data to results/tables/convergence_instance2.csv
+2026-01-10 00:57:23,648 - INFO - 
+============================================================
+2026-01-10 00:57:23,648 - INFO - Processing Instance3
+2026-01-10 00:57:23,648 - INFO - W=2000, H=2000, m=20, n=150, CR=200
+2026-01-10 00:57:23,648 - INFO - ============================================================
+2026-01-10 00:58:09,236 - INFO - Best fitness: 0.786667
+2026-01-10 00:58:09,236 - INFO - Coverage: 116/150 (77.33%)
+2026-01-10 00:58:09,236 - INFO - Connectivity: 136/170 (80.00%)
+2026-01-10 00:58:09,487 - INFO - Saved convergence data to results/tables/convergence_instance3.csv
+2026-01-10 00:58:09,487 - INFO - 
+============================================================
+2026-01-10 00:58:09,487 - INFO - Processing Instance4
+2026-01-10 00:58:09,487 - INFO - W=2000, H=2000, m=25, n=200, CR=200
+2026-01-10 00:58:09,487 - INFO - ============================================================
+2026-01-10 00:59:21,052 - INFO - Best fitness: 0.900833
+2026-01-10 00:59:21,052 - INFO - Coverage: 179/200 (89.50%)
+2026-01-10 00:59:21,052 - INFO - Connectivity: 204/225 (90.67%)
+2026-01-10 00:59:21,340 - INFO - Saved convergence data to results/tables/convergence_instance4.csv
+2026-01-10 00:59:21,349 - INFO - 
+Convergence analysis completed!
+2026-01-10 00:59:21,349 - INFO - Results saved to:
+2026-01-10 00:59:21,349 - INFO -   - results/figures/fig17_convergence_instance1.png
+2026-01-10 00:59:21,349 - INFO -   - results/tables/convergence_instance1.csv
+2026-01-10 00:59:21,349 - INFO -   - results/figures/fig18_convergence_instance2.png
+2026-01-10 00:59:21,350 - INFO -   - results/tables/convergence_instance2.csv
+2026-01-10 00:59:21,350 - INFO -   - results/figures/fig19_convergence_instance3.png
+2026-01-10 00:59:21,350 - INFO -   - results/tables/convergence_instance3.csv
+2026-01-10 00:59:21,350 - INFO -   - results/figures/fig20_convergence_instance4.png
+2026-01-10 00:59:21,350 - INFO -   - results/tables/convergence_instance4.csv
+2026-01-10 00:59:21,350 - INFO -   - results/tables/table11_convergence.csv
