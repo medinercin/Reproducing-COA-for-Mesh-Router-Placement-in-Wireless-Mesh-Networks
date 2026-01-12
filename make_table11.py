@@ -1,38 +1,14 @@
-"""
-Script to generate Table 11: Convergence Analysis (COA Reference vs Reproduced)
-
-This script:
-1. Reads convergence CSV files for 4 instances
-2. Computes best fitness and iteration for reproduced COA
-3. Creates comparison table with paper reference values
-4. Exports as CSV, LaTeX, and PNG
-
-Usage:
-    python make_table11.py
-
-To change input file paths, modify the INPUT_DIR variable below.
-To change output paths, modify the OUTPUT_DIR variable below.
-"""
+# Table 11 olusturmak icin script
+# COA referans degerleri ile karsilastirma yapiyor
 
 import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.table import Table
 
 
+# sutun ismini bulmak icin fonksiyon
 def find_column(df, possible_names, case_insensitive=True):
-    """
-    Find a column in DataFrame by trying multiple possible names.
-    
-    Args:
-        df: pandas DataFrame
-        possible_names: List of possible column names
-        case_insensitive: If True, match column names case-insensitively
-        
-    Returns:
-        Column name if found, None otherwise
-    """
     df_columns = df.columns.tolist()
     
     if case_insensitive:
@@ -51,62 +27,41 @@ def find_column(df, possible_names, case_insensitive=True):
 
 
 def process_convergence_file(csv_path):
-    """
-    Process a single convergence CSV file and compute best fitness and iteration.
-    
-    Args:
-        csv_path: Path to the convergence CSV file
-        
-    Returns:
-        Tuple of (best_fitness, best_iteration) where:
-        - best_fitness: Best (minimum) fitness value achieved (1 - min_cost)
-        - best_iteration: 1-based iteration index where best was first achieved
-    """
-    # Read CSV
+    # csv dosyasini oku
     df = pd.read_csv(csv_path)
     
-    # Find fitness/objective column (it might be named 'cost', 'fitness', etc.)
-    # Based on the actual CSV structure, we have 'cost' column
+    # fitness veya cost sutununu bul
     fitness_col = find_column(df, ["fitness", "best_fitness", "objective", "best_objective", "obj", "best", "cost"])
     
     if fitness_col is None:
-        raise ValueError(f"Could not find fitness/objective/cost column in {csv_path}. Available columns: {df.columns.tolist()}")
+        raise ValueError(f"Sutun bulunamadi: {csv_path}. Mevcut sutunlar: {df.columns.tolist()}")
     
-    # Find iteration column
+    # iteration sutununu bul
     iter_col = find_column(df, ["iteration", "iter", "t"])
     
-    # Get fitness/objective values
+    # degerleri al
     values = df[fitness_col].values
     
-    # If column is 'cost', convert to fitness (fitness = 1 - cost, since lower cost = higher fitness)
-    # If column is already fitness, use as-is (assuming higher is better)
+    # cost ise fitness'e cevir
     if fitness_col.lower() == "cost":
-        # Cost values: lower is better, so best fitness = 1 - min_cost
         fitness_values = 1.0 - values
-        best_idx = np.argmin(values)  # Find index with minimum cost
+        best_idx = np.argmin(values)
     else:
-        # Fitness/objective values: if it's fitness, higher is better
-        # If it's objective and we're minimizing, lower is better
-        # For now, assume we want minimum if it's called 'objective' or maximum if 'fitness'
         if "fitness" in fitness_col.lower():
             fitness_values = values
-            best_idx = np.argmax(values)  # Find index with maximum fitness
+            best_idx = np.argmax(values)
         else:
-            # Objective (minimizing)
-            fitness_values = 1.0 - values  # Convert to fitness
-            best_idx = np.argmin(values)  # Find index with minimum objective
+            fitness_values = 1.0 - values
+            best_idx = np.argmin(values)
     
     best_fitness = fitness_values[best_idx]
     
-    # Get iteration index (1-based)
+    # iteration degerini al (1'den baslamali)
     if iter_col is not None:
-        # Use existing iteration column
         iterations = df[iter_col].values
         best_iteration = iterations[best_idx]
-        # Ensure 1-based (in case CSV has 0-based)
+        # 0'dan basliyorsa 1'e cevir
         if best_iteration == 0 and best_idx == 0:
-            # Might be 0-based, but we want 1-based
-            # Check if all values start from 0 or 1
             if iterations[0] == 0:
                 best_iteration = best_idx + 1
             else:
@@ -114,24 +69,13 @@ def process_convergence_file(csv_path):
         else:
             best_iteration = int(best_iteration)
     else:
-        # Create 1-based iteration from row index
         best_iteration = best_idx + 1
     
     return best_fitness, best_iteration
 
 
 def create_table11(input_dir="results/tables", output_dir="results/tables"):
-    """
-    Create Table 11: Convergence Analysis (COA Reference vs Reproduced).
-    
-    Args:
-        input_dir: Directory containing convergence_instance*.csv files
-        output_dir: Directory to save output files
-        
-    Returns:
-        pandas DataFrame with the table
-    """
-    # Paper reference values (constants)
+    # paper'daki referans degerler
     paper_values = {
         1: {"fitness": 0.85, "iteration": 308.67},
         2: {"fitness": 0.77, "iteration": 721.60},
@@ -139,18 +83,18 @@ def create_table11(input_dir="results/tables", output_dir="results/tables"):
         4: {"fitness": 0.61, "iteration": 911.46},
     }
     
-    # Process each instance
     rows = []
+    # her instance icin isle
     for instance_num in range(1, 5):
         csv_path = os.path.join(input_dir, f"convergence_instance{instance_num}.csv")
         
         if not os.path.exists(csv_path):
-            raise FileNotFoundError(f"Convergence file not found: {csv_path}")
+            raise FileNotFoundError(f"Dosya bulunamadi: {csv_path}")
         
-        # Compute reproduced values
+        # kendi degerlerimizi hesapla
         reproduced_fitness, reproduced_iteration = process_convergence_file(csv_path)
         
-        # Get paper values
+        # paper degerlerini al
         paper_fitness = paper_values[instance_num]["fitness"]
         paper_iteration = paper_values[instance_num]["iteration"]
         
@@ -162,15 +106,15 @@ def create_table11(input_dir="results/tables", output_dir="results/tables"):
             "COA (Reproduced) Iteration": reproduced_iteration,
         })
     
-    # Create DataFrame
+    # dataframe olustur
     df = pd.DataFrame(rows)
     
-    # Format for display (rounding)
+    # formatla
     df_display = df.copy()
     df_display["COA (Paper) Fitness"] = df_display["COA (Paper) Fitness"].apply(lambda x: f"{x:.2f}")
     df_display["COA (Paper) Iteration"] = df_display["COA (Paper) Iteration"].apply(lambda x: f"{x:.2f}")
     df_display["COA (Reproduced) Fitness"] = df_display["COA (Reproduced) Fitness"].apply(lambda x: f"{x:.2f}")
-    # Iteration should be integer if it's integer, otherwise 2 decimals
+    # iteration formatla
     df_display["COA (Reproduced) Iteration"] = df_display["COA (Reproduced) Iteration"].apply(
         lambda x: f"{int(x)}" if x == int(x) else f"{x:.2f}"
     )
@@ -179,22 +123,25 @@ def create_table11(input_dir="results/tables", output_dir="results/tables"):
 
 
 def save_csv(df, output_path):
-    """Save DataFrame to CSV."""
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # klasor yoksa olustur
+    dir_path = os.path.dirname(output_path)
+    if dir_path:
+        os.makedirs(dir_path, exist_ok=True)
     df.to_csv(output_path, index=False)
-    print(f"Saved CSV to: {output_path}")
+    print(f"CSV kaydedildi: {output_path}")
 
 
 def save_latex(df, output_path):
-    """Save DataFrame to LaTeX format."""
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    dir_path = os.path.dirname(output_path)
+    if dir_path:
+        os.makedirs(dir_path, exist_ok=True)
     
-    # Manually create LaTeX table for better control
+    # latex tablosu olustur
     latex_lines = []
     latex_lines.append("\\begin{tabular}{l|cc|cc}")
     latex_lines.append("\\hline")
     
-    # Header row
+    # baslik satiri
     headers = [
         "\\textbf{Instance}",
         "\\textbf{COA (Paper) Fitness}",
@@ -205,16 +152,21 @@ def save_latex(df, output_path):
     latex_lines.append(" & ".join(headers) + " \\\\")
     latex_lines.append("\\hline")
     
-    # Data rows
+    # veri satirlari
     for _, row in df.iterrows():
-        # Format values
+        # degerleri formatla
+        iter_val = row['COA (Reproduced) Iteration']
+        if iter_val == int(iter_val):
+            iter_str = f"{int(iter_val)}"
+        else:
+            iter_str = f"{iter_val:.2f}"
+        
         values = [
             str(row["Instance"]),
             f"{row['COA (Paper) Fitness']:.2f}",
             f"{row['COA (Paper) Iteration']:.2f}",
             f"{row['COA (Reproduced) Fitness']:.2f}",
-            f"{int(row['COA (Reproduced) Iteration'])}" if row['COA (Reproduced) Iteration'] == int(row['COA (Reproduced) Iteration']) 
-            else f"{row['COA (Reproduced) Iteration']:.2f}",
+            iter_str,
         ]
         latex_lines.append(" & ".join(values) + " \\\\")
     
@@ -226,21 +178,23 @@ def save_latex(df, output_path):
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(latex_str)
     
-    print(f"Saved LaTeX to: {output_path}")
+    print(f"LaTeX kaydedildi: {output_path}")
 
 
 def save_png(df, output_path, title="Table 11: Convergence Analysis (COA)"):
-    """Save DataFrame as PNG image with styling similar to paper."""
+    # figure olustur
     fig, ax = plt.subplots(figsize=(12, 3.5))
     ax.axis("tight")
     ax.axis("off")
     
-    # Prepare table data
+    # tablo verilerini hazirla
     table_data = []
     for _, row in df.iterrows():
-        # Format reproduced iteration (integer if integer, else 2 decimals)
         repro_iter = row['COA (Reproduced) Iteration']
-        repro_iter_str = f"{int(repro_iter)}" if repro_iter == int(repro_iter) else f"{repro_iter:.2f}"
+        if repro_iter == int(repro_iter):
+            repro_iter_str = f"{int(repro_iter)}"
+        else:
+            repro_iter_str = f"{repro_iter:.2f}"
         
         table_data.append([
             str(row["Instance"]),
@@ -250,7 +204,7 @@ def save_png(df, output_path, title="Table 11: Convergence Analysis (COA)"):
             repro_iter_str,
         ])
     
-    # Column headers
+    # sutun basliklari
     col_labels = [
         "Instance",
         "COA (Paper)\nFitness",
@@ -259,7 +213,7 @@ def save_png(df, output_path, title="Table 11: Convergence Analysis (COA)"):
         "COA (Reproduced)\nIteration",
     ]
     
-    # Create table
+    # tablo olustur
     table = ax.table(
         cellText=table_data,
         colLabels=col_labels,
@@ -268,20 +222,20 @@ def save_png(df, output_path, title="Table 11: Convergence Analysis (COA)"):
         bbox=[0, 0, 1, 1],
     )
     
-    # Style the table
+    # tablo stilleri
     table.auto_set_font_size(False)
     table.set_fontsize(11)
     table.scale(1, 2.2)
     
-    # Make header bold and styled
+    # baslik stilini ayarla
     for i in range(len(col_labels)):
         cell = table[(0, i)]
-        cell.set_facecolor("#D0D0D0")  # Darker gray for header
+        cell.set_facecolor("#D0D0D0")
         cell.set_text_props(weight="bold", fontsize=11)
         cell.set_edgecolor("black")
         cell.set_linewidth(2.0)
     
-    # Style data cells with proper grid lines
+    # veri hucrelerini stillendir
     for i in range(1, len(table_data) + 1):
         for j in range(len(col_labels)):
             cell = table[(i, j)]
@@ -289,62 +243,60 @@ def save_png(df, output_path, title="Table 11: Convergence Analysis (COA)"):
             cell.set_linewidth(1.5)
             cell.set_text_props(fontsize=11)
             if j == 0:
-                # Instance column - slightly different background
                 cell.set_facecolor("#F8F8F8")
             else:
                 cell.set_facecolor("white")
     
-    # Add vertical separator lines for better readability
-    # Between Instance and Paper columns
+    # dikey ayirici cizgiler
     for i in range(len(table_data) + 1):
         cell = table[(i, 1)]
         cell.set_linewidth(2.0)
-    # Between Paper and Reproduced columns
     for i in range(len(table_data) + 1):
         cell = table[(i, 3)]
         cell.set_linewidth(2.0)
     
-    # Add title
+    # baslik ekle
     plt.suptitle(title, fontsize=14, fontweight="bold", y=0.98)
     
-    # Save figure
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # kaydet
+    dir_path = os.path.dirname(output_path)
+    if dir_path:
+        os.makedirs(dir_path, exist_ok=True)
     plt.tight_layout(rect=[0, 0, 1, 0.95])
     plt.savefig(output_path, dpi=300, bbox_inches="tight", facecolor="white", edgecolor="none")
     plt.close()
     
-    print(f"Saved PNG to: {output_path}")
+    print(f"PNG kaydedildi: {output_path}")
 
 
 def main():
-    """Main function to generate Table 11."""
-    # Configuration: Change these paths if needed
+    # dosya yollari
     INPUT_DIR = "results/tables"
     OUTPUT_DIR = "results/tables"
     
     print("=" * 70)
-    print("Generating Table 11: Convergence Analysis (COA Reference vs Reproduced)")
+    print("Table 11 olusturuluyor...")
     print("=" * 70)
     
-    # Create table
-    print("\nProcessing convergence CSV files...")
+    # tabloyu olustur
+    print("\nCSV dosyalari isleniyor...")
     df, df_display = create_table11(input_dir=INPUT_DIR, output_dir=OUTPUT_DIR)
     
-    # Display table
+    # tabloyu goster
     print("\n" + "=" * 70)
     print("Table 11: Convergence Analysis")
     print("=" * 70)
     print(df_display.to_string(index=False))
     print("=" * 70)
     
-    # Save outputs
-    print("\nSaving outputs...")
+    # dosyalari kaydet
+    print("\nDosyalar kaydediliyor...")
     
-    # CSV (with formatted values for readability, but also save raw numeric version)
+    # CSV
     csv_path = os.path.join(OUTPUT_DIR, "table11_coa_reference_vs_reproduced.csv")
     save_csv(df_display, csv_path)
     
-    # Also save raw numeric version for further processing
+    # ham veri CSV
     csv_raw_path = os.path.join(OUTPUT_DIR, "table11_coa_reference_vs_reproduced_raw.csv")
     save_csv(df, csv_raw_path)
     
@@ -357,9 +309,9 @@ def main():
     save_png(df, png_path)
     
     print("\n" + "=" * 70)
-    print("Table 11 generation complete!")
+    print("Table 11 hazir!")
     print("=" * 70)
-    print(f"\nOutput files saved to: {OUTPUT_DIR}")
+    print(f"\nDosyalar kaydedildi: {OUTPUT_DIR}")
     print(f"  - {os.path.basename(csv_path)}")
     print(f"  - {os.path.basename(tex_path)}")
     print(f"  - {os.path.basename(png_path)}")
