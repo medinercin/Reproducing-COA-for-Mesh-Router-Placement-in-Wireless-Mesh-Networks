@@ -1,61 +1,61 @@
-# COA ile WMN Router Placement
+# COA for WMN Router Placement
 
-Bu proje ders kapsamında yapılmıştır. Coyote Optimization Algorithm (COA) kullanarak Wireless Mesh Network'lerde router yerleşimi optimizasyonu gerçekleştirilmiştir.
+This project was done for a course. It implements router placement optimization in Wireless Mesh Networks using the Coyote Optimization Algorithm (COA).
 
-## Proje Yapısı
+## Project Structure
 
 ```
 BBL512E_COA_WMN/
-├── scripts/              # Çalıştırma scriptleri
-├── src/wmn/              # Ana kod modülleri
-├── results/              # Sonuçlar (tablolar, grafikler)
-│   ├── figures/         # Grafikler
-│   ├── tables/          # Tablolar (CSV, PNG, LaTeX)
-│   └── logs/            # Log dosyaları
-└── requirements.txt      # Gereksinimler
+├── scripts/              # Execution scripts
+├── src/wmn/              # Main code modules
+├── results/              # Results (tables, figures)
+│   ├── figures/         # Figures
+│   ├── tables/          # Tables (CSV, PNG, LaTeX)
+│   └── logs/            # Log files
+└── requirements.txt      # Requirements
 ```
 
-## Kurulum
+## Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Kullanım
+## Usage
 
-### Temel Placement
+### Basic Placement
 ```bash
 python scripts/run_placement.py
 ```
 
-### Convergence Analizi
+### Convergence Analysis
 ```bash
 python scripts/run_convergence.py
 python generate_convergence_figures.py
 python make_table11.py
 ```
 
-### Parametre Sweep Deneyleri
+### Parameter Sweep Experiments
 ```bash
-python scripts/run_clients_sweep_parallel.py    # Client sayısı sweep
-python scripts/run_routers_sweep_parallel.py    # Router sayısı sweep
+python scripts/run_clients_sweep_parallel.py    # Client count sweep
+python scripts/run_routers_sweep_parallel.py    # Router count sweep
 python scripts/run_radius_sweep_parallel.py     # Coverage radius sweep
 ```
 
-## Sonuçlar
+## Results
 
-Sonuçlar `results/` klasöründe:
-- **figures/**: Convergence grafikleri ve placement görselleri
-- **tables/**: Deney sonuçları (CSV formatında)
+Results are in the `results/` folder:
+- **figures/**: Convergence plots and placement visualizations
+- **tables/**: Experiment results (in CSV format)
 
-### Örnek Sonuçlar
+### Example Results
 
 ![Placement](results/tables/fig_placement_coa.png)
 
 ![Convergence](results/figures/Fig17_instance1_COA_reproduced.png)
 
-## Notlar
+## Notes
 
-- Tüm deneyler parallel processing ile hızlandırılmıştır
-- Sonuçlar paper'daki referans değerlerle karşılaştırılmıştır
-- Detaylı loglar `results/logs/` klasöründe bulunmaktadır
+- All experiments are accelerated with parallel processing
+- Results are compared with reference values from the paper
+- Detailed logs are available in the `results/logs/` folder
