@@ -50,9 +50,11 @@ Results are in the `results/` folder:
 
 ### Example Results
 
-![Placement](results/tables/fig_placement_coa.png)
+<img src="results/tables/fig_placement_coa.png" width="400" alt="Placement">
 
-![Convergence](results/figures/Fig17_instance1_COA_reproduced.png)
+<img src="results/figures/Fig17_instance1_COA_reproduced.png" width="400" alt="Convergence">
+
+<img src="results/figures/fig14_clients_sweep_coa.png" width="400" alt="Figure 14 - Clients Sweep">
 
 ## Notes
 
