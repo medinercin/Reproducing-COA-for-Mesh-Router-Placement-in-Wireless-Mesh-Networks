@@ -54,7 +54,7 @@ Results are in the `results/` folder:
 
 <img src="results/figures/Fig17_instance1_COA_reproduced.png" width="400" alt="Convergence">
 
-<img src="results/figures/fig14_clients_sweep_coa.png" width="400" alt="Figure 14 - Clients Sweep">
+<img src="results/figures/fig14.png" width="400" alt="Figure 14 - Clients Sweep">
 
 ## Notes
 
