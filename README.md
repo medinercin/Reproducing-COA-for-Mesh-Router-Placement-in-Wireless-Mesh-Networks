@@ -10,7 +10,7 @@ BBL512E_COA_WMN/
 ├── src/wmn/              # Main code modules
 ├── results/              # Results (tables, figures)
 │   ├── figures/         # Figures
-│   ├── tables/          # Tables (CSV, PNG, LaTeX)
+│   ├── tables/          # Tables 
 │   └── logs/            # Log files
 └── requirements.txt      # Requirements
 ```
