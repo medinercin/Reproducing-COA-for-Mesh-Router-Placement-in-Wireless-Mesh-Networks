@@ -12,7 +12,7 @@ BBL512E_COA_WMN/
 │   ├── figures/         # Figures
 │   ├── tables/          # Tables 
 │   └── logs/            # Log files
-└── requirements.txt      # Requirements
+└── requirements.txt      
 ```
 
 ## Installation
